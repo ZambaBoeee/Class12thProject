@@ -2,177 +2,281 @@
 //end date: pending
 
 #include<iostream>
-#include<fstream.h>
+#include<fstream>
 #include<string.h>
+#include<stdio.h>
 
 using namespace std;
+using std::ios;
 
-//---------------------------------------------------------------
-//start of inline documentation
+//valuable strings
+string CurUser = " ";
+string VInput[11] = {"h","c","q","nu","lu","nn","on","dn","lo","du"};
+string help = "This are the commands: \nh				for help \nc				for credits \nq				to quit \nnnu			create new user(public,no password) \nnu			create new user \nlu			loginto existing user \nn			create new note \non			open a note (only works if you are logged in) \ndn			delete o note (only works if are logged in)\nlo 			to logout of current user\ndu			delete current user\n \n";
+string credit = "Preetom Boro, Pulldeep Boro Gogoi, Pranjit Boro, Manash Boro\n\n";
 
-string sdoc;
-sdoc = "2023 computer project. St.John's H.S. School\n
-(an atempt to mimick working MySql commandline)\n
-for help- h \n
-for credit- c "
+//function declarations
+int check(string a);
+void Display(string a);
+int verify(string a, string b);
+int verify(string a);
 
-string credit;
-credit = "Group Member:\n
-Preetom Boro\n
-Pulldeep Bora Gogoi\n
-Pranjit Thakur\n
-Manash Boro"
+//Class defination
+class User{
+    private:
+    string name, password;
 
-string help;
-help="Following are the available commands:\n
-nuser 				to create new user\n
-duser 				to delete user\n
-ndata 				to create new data base\n
-ddata 				to delete database\n
-ntable				to create new table\n
-dtable				to delete new table\n
-showu					to show list of all users\n
-showd					to show list of databases of current user\n
-showt					to show list of all tables of current database\n
-displayt			to show the contents of a table\n
-displayd			to show current user,databse and table\n
-lin						to loginto/use a different user/database"
+    public:
 
-//end of inline documentation
-//--------------------------------------------------------------
+    //User Creation
+    User(){
+        cout<<"Enter name:";
+        cin>>name;
+        cout<<"Enter Password:";
+        cin>>password;
+        
+        //create file
+        fstream file;
+        file.open(name+".txt", std::ios::out );
+        file<<password<<"\n";
+        file<<"Notes authored:";
+        file.close();
+        CurUser = name;
+    }
 
+    //loging in (don't call if not verified)
+    User(string a,string b){
+        name = a;
+        password = b;
+        CurUser = name;
+    }
 
-//some global variables
-int n=13; //number of valid inputs
+    //dummy object to access different member function
+    User(string a){
+        name = a;
+    }
 
-//start of useful function defination(may or maynot be member function of any class)
-//--------------------------------------------------------------
+    //new note (takes note name as argument)
+    void newNote(string a){
+        string line="";
+        fstream file;
+        file.open(a+".txt",std::ios::out);
+        cout<<"enter -1 to exit";
+        while(file){
+            getline(cin, line);
 
-int UserSiNo(){
-	return 0;
+            if(line=="-1")
+                break;
+            
+            file<<line<<endl;
+        }
+        file.close();
+        return;
+    }
+
+    //open a note(takes in esisting note name)
+    void openNote(string a){
+        string line;
+        disNote(a);
+        fstream file;
+        file.open(a+".txt", std::ios::in);
+        cout<<"enter -1 to exit";
+        while(file){
+            getline(cin, line);
+            if(line=="-1")
+                break;
+            
+            file<<line<<endl;
+        }
+        file.close();       
+        return;
+    }
+
+    //display a note(takes note name as argument)
+    void disNote(string a){
+        string line="";
+        fstream file;
+        file.open(a+".txt", std::ios::in);
+        while(getline(file,line)){
+            cout<<line<<endl;
+        }
+        file.close();
+        return;
+    }
+
+    //delete user (don't call without verification).
+    //returns 1 if user is deleted.
+    int delUser(){
+        int n;
+        char filename[20];
+        strcpy(filename, CurUser.c_str());
+        n = remove(filename);
+        if(n==0){
+            cout<<"User not deleted.\n\n";
+        }
+        else{
+            cout<<"User deleted.\n\n";
+            n=1;
+        }
+        return n;
+    }
+    
+};
+
+//-----------------------------------------------------------------------
+//validates input
+int check(string a)
+{
+	int n =0;
+	for(int i =0; i<11;i++){
+		if (a==VInput[i])
+			n+=1;
+	}
+	return n;
 }
 
-int DatabaseSiNo(){
-	return 0;
-}
+//takes actions according to the input
+void Display(string a){
+	string nam="";
+    string pass="";
 
-int InputValidity(string a){
-	int validity=0;
-	for(int i =0; i>=n)
-	return validity;
-}
+    //view help with "h"
+	if (a=="h"){
+		cout<<help;
+    }
 
-void Display(int a){
-	int type =0;
-	switch(a)
-	case 1:
-		DisUser();
-		break;
-	case 2:
-		DisData();
-		break;
-	case 3:
-		DisTable();
-		break;
-	default:
-		return;
+    //loginto a user with "lu"
+	else if (a=="lu"){
+		cout<<"Enter username(case sensitive):";
+		cin>>nam;
+        cout<<"Enter the password:";
+        cin>>pass;
+        if(verify(nam,pass)){
+		    User a(nam,pass);
+        }
+        else{
+            cout<<"wrong set of User and Password\n\n";
+	    }
+    }
+
+    //create new user with "nu"
+	else if (a=="nu"){
+		User a;
+	}
+
+    //delete current user with "du"
+	else if (a=="du"){
+		cout<<"Enter username(case sensitive):";
+		cin>>nam;
+        cout<<"Enter the password:";
+        cin>>pass;
+        if(CurUser!=" "){
+            User a(CurUser);
+            a.delUser();
+            
+        }
+        else
+            cout<<"wrong set of User and Password.\n\n";
+	}
+
+    //logout from current user "lo"
+    else if (a=="lo"){
+        if(verify(nam)){
+            CurUser =" ";
+        }
+        else{
+            cout<<"You are not logged in";
+        }
+    }
+
+    //create new note(for a user)
+    else if(a=="nn"){
+        if(CurUser !=" "){
+            string b="";
+            User a(CurUser);
+            cout<<"Enter the name of your note:";
+            cin>>b;
+            a.newNote(b);
+        }
+        else {
+            cout<<"You are not logged in.\ntype 'lu' to log in or 'nu' to create new user\n";
+        }
+    }
+
+    //open an existing note with "on"
+    else if(a=="on"){
+        string note_name;
+        cout<<"Enter Note name:";
+        cin>>note_name;
+        verify(note_name);
+    }
+
 	return;
 }
 
-void DisUser(){
-
-}
-void DisData(){
-
-}
-void DisTable(){
-
-}
-
-int IdentifyType(string a){
-	//1 for user, 2 for data base;
-	int tpe;
-	
-	return tpe;
-}
-
-
-
-//start of class definations
-//---------------------------------------------------------------
-class User{
-	private:
-		int siNo;
-		string name;
-	public:
-		User(){
-			cout<<"Enter User name:";
-			cin>>name;
-		}
-		~User(){
-			cout<<"User "<<name<<" deleted succefully";
-		}
+//verify if the user name and password is valid
+int verify(string a, string b){
+    int n;
+    fstream file;
+    file.open(a+".txt", std::ios::in );
+    file.seekg(0);
+    if(file){
+        string c;
+        getline(file,c);
+        if (b==c){
+            n=1;
+        }
+        else{
+            cout<<"worng password.\n";
+        }
+    }
+    else{
+        cout<<a<<" username not found\n\n";
+    }
+    return n;
 }
 
-
-class table{
-	private:
-		int rowno=0 ,colno =0;
-		string name;
-	public:
-		table(){
-			cout<<"Enter table name:";
-			cin>>name;
-			cout<<"\nEnter colomn number:";
-			cin>>colno;
-			cout<<"\nEnter the number of rows:";
-			cin>>rowno;
-		}
-		~table(){
-			cout<<"table "<<name<<" deleted successfully\n";
-		}
+//verify if user exists
+int verify(string a){
+    int n=0;
+    fstream file;
+    file.open(a+".dat", std::ios::in );
+    file.seekg(0);
+    if(file){
+        n=1;
+    }
+    return n;
 }
 
-class Database{
-	private:
-		int siNo, noTable;
-		string name;
-		
-	public:
-		Database(){
-			cout<<:"Enter the name of the database:";
-			cin>>name;
-		}
-		~Database(){
-			cout<<"database deleted sucessfully";
-		}
-}
-
-//---------------------------------------------------------------
-//end of class defination
-
-
-string validinput[n];
-validinput = {"h","c","q","nuser","duser","ndata","ddata",
-"ntable","dtabe","listu","listd","listt","showt","showdu",
-"lin"};
+//--------------------------------------------------------------
 
 int main(){
-	Display();
-	string inpu = "";
-	cout<<sdoc;
-	
-	for(int i=0;;){
+    string input;
+    input ="";
+    cout<<"welcome";
+    for(int i =0; i<1;)
+    {
+        input = "";
+
+
+		cout<<"(EnterCommand"<<CurUser<<")";
+		cin>>input;
+		//system("cls");
 		
-		system("cls");
-		cin>>inpu;
-		system("cls");
-		if InputValidity(inpu);
-		{
-			display(IdentifyInput(inpu));
+		if (input =="q"){
+			cout<<"quitting program\n";
+			break;
 		}
-	}
-	cout<<"program runned sucessfully";
-	system("pause");
-	return 0;
+		else if ((check(input))){
+			Display(input);
+			//cout<<"nice command:) \n \n";
+		}
+		else
+		{
+			cout<<input<<" is not a valid input\nenter 'h' for help\n\n";
+		}
+
+    }
+
+    return 0;
 }
