@@ -4,3 +4,4 @@ Bug report/missing feature
 *system("cls") doesn't work inside the for loop. (unsolved bug)
 *User name cannot contain spaces. (unsolved bug)
 *Note name cannot contain spaces. (unsolved bug)
+*When a note is deleted the note list in User profile(User.txt) is not updated.
