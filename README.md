@@ -1,4 +1,2 @@
 # 12thProjectWork
-Aim: To develop a program in C++ with object oriented thechnology (including the usage of Data files)
-
-feel free to use this program :D
+This repository is to host the standalone source code and executable file for class 12 project submission
