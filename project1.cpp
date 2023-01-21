@@ -1,5 +1,5 @@
 //start date: Jan 6, 2023.
-//end date: Jan 20, 2023
+//end date: Jan 21, 2023
 
 #include<iostream>
 #include<fstream>
@@ -22,13 +22,12 @@ int belong(string a, string b);
 int verify(string a, string b);
 int verify(string a);
 
-//Class defination
+//Defination of User Class
 class User{
     private:
     string name, password;
 
     public:
-
     //User Creation
     User(){
         cout<<"Enter name:";
@@ -36,10 +35,12 @@ class User{
         cout<<"Enter Password:";
         cin>>password;
         
+        //check if User already esists
         fstream test;
         test.open(name+".txt", std::ios::in);
         if(test.is_open()){
             cout<<"This User already exists.\n\n";
+            test.close();
             return;
         }
         
@@ -202,8 +203,7 @@ class User{
 
 //-----------------------------------------------------------------------
 //validates input
-int check(string a)
-{
+int check(string a){
 	int n =0;
 	for(int i =0; i<11;i++){
 		if (a==VInput[i])
@@ -254,8 +254,7 @@ void Display(string a){
         cin>>pass;
         if(verify(nam,pass)){
             User b(nam);
-            b.delUser();
-            
+            b.delUser(); 
         }
         return;
 	}
@@ -325,7 +324,7 @@ void Display(string a){
 }
 
 //only call after verify()
-//checks if string "a" note belongs to string "b" user.
+//checks if string "a" (note) belongs to string "b" (user).
 int belong(string a, string b){
     int n=0;
     User h(b);
@@ -348,7 +347,7 @@ int belong(string a, string b){
     return n;
 }
 
-//verify if the user name and password is valid
+//verify if the user name and password is valid (cout available)
 int verify(string a, string b){
     int n;
     fstream file;
@@ -370,29 +369,26 @@ int verify(string a, string b){
     return n;
 }
 
-//verify if user exists
+//verify if user/note exists (no cout)
 int verify(string a){
     int n=0;
     fstream file;
     file.open(a+".txt", std::ios::in );
-    file.seekg(0);
     if(file){
         n=1;
+        file.close();
     }
     return n;
 }
 
-//--------------------------------------------------------------
+//----------------------------------------------------------------------
 int main(){
     string input;
-    input ="";
     cout<<"(This project has quite a few bug, please read bug report.)\n\n";
-    for(int i =0; i<1;)
-    {
+    for(int i =0; i<1;){
         input = "";
 		cout<<"(EnterCommand  "<<CurUser<<" )";
 		cin>>input;
-		//system("cls");
 		
 		if (input =="q"){
 			cout<<"quitting program\n";
@@ -405,10 +401,8 @@ int main(){
 		else if ((check(input))){
 			Display(input);
             continue;
-			//cout<<"nice command:) \n \n";
 		}
-		else
-		{
+		else{
 			cout<<"\n'"<<input<<"' is not a valid input\nenter 'h' for help\n\n";
 		}
     }
