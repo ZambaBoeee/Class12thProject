@@ -1,0 +1,6 @@
+Bug report/missing feature
+*When an User gets deleted the Notes written by the User is still visible. (feature missing)
+*When two or more user makes a note with same name the lastest note replaces the older note. (feature missing)
+*system("cls") doesn't work inside the for loop. (unsolved bug)
+*User name cannot contain spaces. (unsolved bug)
+*Note name cannot contain spaces. (unsolved bug)
