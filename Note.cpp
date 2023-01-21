@@ -12,8 +12,8 @@ using std::ios;
 //valuable strings
 string CurUser = " ";
 string VInput[11] = {"h","c","q","nu","lu","nn","on","dn","lo","du","en"};
-string help = "This are the commands: \nh				for help \nc				for credits \nq				to quit \nen			edit an existing note\nnu			create new user \nlu			loginto existing user \nn			create new note \non			open a note (only works if you are logged in) \ndn			delete a note (only works if are logged in)\nlo 			to logout of current user\ndu			delete current user\n \n";
-string credit = "Preetom Boro, Pulldeep Boro Gogoi, Pranjit Boro, Manash Boro\n\n";
+string help = "These are the commands: \nh				for help \nc				for credits \nq				to quit \nen			edit an existing note\nnu			create new user \nlu			loginto existing user \nn			create new note \non			open a note (only works if you are logged in) \ndn			delete a note (only works if are logged in)\nlo 			to logout of current user\ndu			delete current user\n \n";
+string credit = "Preetom Boro, Pulldeep Bora Gogoi, Pranjit Basumutary, Manash Boro\n\n";
 
 //function declarations
 int check(string a);
@@ -384,7 +384,7 @@ int verify(string a){
 //----------------------------------------------------------------------
 int main(){
     string input;
-    cout<<"(This project has quite a few bug, please read bug report.)\n\n";
+    cout<<"(This project has quite a few bugs, please read bug report.)\n\n";
     for(int i =0; i<1;){
         input = "";
 		cout<<"(EnterCommand  "<<CurUser<<" )";
